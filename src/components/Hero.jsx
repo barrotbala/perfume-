@@ -19,7 +19,7 @@ const Hero = () => {
       <nav className="absolute top-0 left-0 w-full z-50 px-8 md:px-16 py-10 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className="bg-[#4a0411] p-2 rounded shadow-2xl">
-            <img src="/images/logo1.jpeg" alt="FRAGGO Logo" className="h-8 object-contain mix-blend-lighten" />
+            <img src="/images/logo1.jpeg" alt="FRAGGO Logo" className="h-16 object-contain mix-blend-lighten" />
           </div>
           <span className="text-white font-playfair font-bold tracking-[0.4em] text-sm uppercase">FRAGGO</span>
         </div>

@@ -1,201 +1,260 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const products = [
   {
     id: 'serose',
-    name: "SEROSE",
-    tagline: "Extrait de Parfum • Blossom",
-    description: "A masterful blend of Sichuan pepper and turmeric opening into a heart of rare roses. Earthy, floral, and warm.",
-    image: "/images/p1.jpeg",
-    bgImage: "/images/trust-bg.png",
-    cardBg: "bg-gradient-to-br from-[#450a0a] via-[#1a0505] to-black", 
-    accentColor: "text-red-500",
-    titleColor: "bg-gradient-to-r from-[#f5e6d3] to-[#d4af37] bg-clip-text text-transparent",
-    subtextColor: "text-[#d1d1d1]",
-    borderColor: "border-red-900/30",
-    glowColor: "shadow-[0_0_80px_rgba(139,0,0,0.4)]",
-    btnHover: "hover:bg-red-800",
-    keywords: ["Rare Roses", "Earthy", "Warm"],
+    name: 'SEROSE',
+    tagline: 'Extrait de Parfum',
+    category: 'Blossom',
+    description: 'A masterful blend of Sichuan pepper and turmeric opening into a heart of rare roses.',
+    image: '/images/p1.jpeg',
+    accent: '#d4af37',
+    bg: 'linear-gradient(135deg, #2d0a0a 0%, #1a0505 60%, #0d0000 100%)',
+    badge: 'Bestseller',
+    badgeColor: '#d4af37',
   },
   {
     id: 'crush',
-    name: "CRUSH",
-    tagline: "Extrait de Parfum • Tropical",
-    description: "A vibrant, tropical masterpiece that captures the essence of a sun-drenched paradise. Bold, fruity, and smoky.",
-    image: "/images/p2.jpeg",
-    bgImage: "/images/crush-bottle.png",
-    cardBg: "bg-[#FFFBF5]",
-    accentColor: "text-orange-600",
-    titleColor: "text-[#111]",
-    subtextColor: "text-gray-500",
-    borderColor: "border-orange-100/50",
-    glowColor: "shadow-[0_0_80px_rgba(249,115,22,0.2)]",
-    btnHover: "hover:bg-orange-600",
-    keywords: ["Tropical", "Bold", "Fruity"],
+    name: 'CRUSH',
+    tagline: 'Extrait de Parfum',
+    category: 'Tropical',
+    description: 'A vibrant tropical masterpiece capturing the essence of a sun-drenched paradise.',
+    image: '/images/p2.jpeg',
+    accent: '#f97316',
+    bg: 'linear-gradient(135deg, #fff8f0 0%, #fff3e0 60%, #fde8c8 100%)',
+    badge: 'New Arrival',
+    badgeColor: '#f97316',
+    dark: false,
   },
   {
     id: 'flora',
-    name: "FLORA",
-    tagline: "Extrait de Parfum • Blossom",
-    description: "An elegant infusion of peony and mandarin, settled on a base of warm sandalwood and patchouli.",
-    image: "/images/p3.jpeg",
-    bgImage: "/images/p3.jpeg",
-    cardBg: "bg-gradient-to-br from-[#FFF9F9] via-[#FDF2F8] to-[#FEF9C3]", // Cream to Floral Pink to Light Gold
-    accentColor: "text-[#db2777]", // Deep pink
-    titleColor: "bg-gradient-to-r from-[#d4af37] via-[#db2777] to-[#d4af37] bg-clip-text text-transparent",
-    subtextColor: "text-gray-600",
-    borderColor: "border-pink-100",
-    glowColor: "shadow-[0_0_80px_rgba(219,39,119,0.25)]",
-    btnHover: "hover:bg-gradient-to-r hover:from-[#d4af37] hover:to-[#db2777]",
-    keywords: ["Peony", "Mandarin", "Elegant"],
-  }
+    name: 'FLORA',
+    tagline: 'Extrait de Parfum',
+    category: 'Blossom',
+    description: 'An elegant infusion of peony and mandarin, settled on a base of warm sandalwood.',
+    image: '/images/p3.jpeg',
+    accent: '#db2777',
+    bg: 'linear-gradient(135deg, #fff9f9 0%, #fdf2f8 60%, #fce7f3 100%)',
+    badge: 'Limited',
+    badgeColor: '#db2777',
+    dark: false,
+  },
+  {
+    id: 'oud-dubai',
+    name: 'OUD OF DUBAI',
+    tagline: 'Eau de Parfum',
+    category: 'Oriental',
+    description: 'A rich oud-based fragrance with deep amber and wood notes evoking the spirit of Dubai.',
+    image: '/images/p4.jpeg',
+    accent: '#b8860b',
+    bg: 'linear-gradient(135deg, #1c0e00 0%, #2d1500 60%, #1a0d00 100%)',
+    badge: 'Exclusive',
+    badgeColor: '#b8860b',
+  },
+  {
+    id: 'silver-shade',
+    name: 'SILVER SHADE',
+    tagline: 'Eau de Parfum',
+    category: 'Fresh Woody',
+    description: 'A sleek, contemporary blend of crisp woods and subtle musk for a sophisticated presence.',
+    image: '/images/p5.jpeg',
+    accent: '#94a3b8',
+    bg: 'linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 60%, #ffffff 100%)',
+    badge: 'Signature',
+    badgeColor: '#475569',
+    dark: false,
+  },
+  {
+    id: 'wave',
+    name: 'WAVE',
+    tagline: 'Eau de Parfum',
+    category: 'Aquatic',
+    description: 'One wave, endless impressions. A fresh oceanic burst with marine notes and a citrus heart.',
+    image: '/images/p6.jpeg',
+    accent: '#0ea5e9',
+    bg: 'linear-gradient(135deg, #0c1b33 0%, #0f2d4a 60%, #0a1f35 100%)',
+    badge: 'Cruelty Free',
+    badgeColor: '#0ea5e9',
+  },
 ];
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.7,
+      ease: 'easeOut',
+    },
+  }),
+};
+
 const ProductCard = ({ product, index }) => {
-  const isEven = index % 2 === 0;
-  const cardRef = useRef(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
-  });
-
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-
-  // Highlight logic for description
-  const renderDescription = (text, keywords, accentColor) => {
-    let parts = [text];
-    keywords.forEach(keyword => {
-      let newParts = [];
-      parts.forEach(part => {
-        if (typeof part === 'string') {
-          const split = part.split(keyword);
-          for (let i = 0; i < split.length; i++) {
-            newParts.push(split[i]);
-            if (i < split.length - 1) newParts.push(<span key={keyword + i} className={`${accentColor} font-bold`}>{keyword}</span>);
-          }
-        } else {
-          newParts.push(part);
-        }
-      });
-      parts = newParts;
-    });
-    return parts;
-  };
+  const isDark = product.dark !== false;
 
   return (
-    <div ref={cardRef} className="py-4 md:py-6 px-4 md:px-8">
-      <div className={`relative max-w-7xl mx-auto overflow-hidden rounded-[4rem] md:rounded-[6rem] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.02)] ${product.cardBg}`}>
-        {/* Parallax Background Image / Pattern */}
-        <motion.div 
-          className="absolute inset-0 z-0 opacity-[0.12]"
-          style={{ y: bgY }}
-        >
-          <img 
-            src={product.bgImage} 
-            alt="" 
-            className={`w-full h-full object-cover blur-3xl`}
-            style={{ minHeight: '120%', top: '-10%', position: 'absolute' }}
-          />
-        </motion.div>
-        
-        {/* Extra Decorative layer for Flora floating patterns */}
-        {product.id === 'flora' && (
-          <motion.div 
-            animate={{ 
-              y: [0, -20, 0],
-              opacity: [0.1, 0.2, 0.1]
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 z-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/floral-paper.png')] opacity-10"
-          />
-        )}
-
-        {/* Card Content Wrapper */}
-        <div className="relative z-10 px-8 md:px-24 py-12 md:py-20">
-          <div className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-12 md:gap-24`}>
-            
-            {/* Content Area */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="w-full md:w-1/2"
-            >
-              <span className={`font-playfair italic tracking-[0.3em] text-xs mb-4 block font-medium ${product.accentColor}`}>
-                Signature Collection
-              </span>
-              <h2 className={`text-5xl md:text-8xl font-bold mb-4 font-playfair uppercase tracking-tighter leading-none ${product.titleColor}`}>
-                {product.name}
-              </h2>
-              <h3 className={`text-xl font-playfair italic mb-8 opacity-80 ${product.accentColor}`}>
-                {product.tagline}
-              </h3>
-              <p className={`${product.subtextColor} text-base md:text-lg mb-10 font-medium leading-loose tracking-wide max-w-xl italic`}>
-                {renderDescription(product.description, product.keywords, product.accentColor)}
-              </p>
-              <Link 
-                to={`/product/${product.id}`}
-                className="inline-block"
-              >
-                <div className={`px-12 py-4 bg-[#111] text-white text-[10px] font-bold uppercase tracking-[0.4em] ${product.btnHover} transition-all duration-500 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1`}>
-                  Explore Fragrance
-                </div>
-              </Link>
-            </motion.div>
-
-            {/* Image Area */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ 
-                opacity: 1, 
-                scale: 1,
-                y: [0, -10, 0]
-              }}
-              viewport={{ once: true }}
-              transition={{ 
-                opacity: { duration: 1.2 },
-                scale: { duration: 1.2 },
-                y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-              }}
-              className="w-full md:w-1/2 flex justify-center"
-            >
-              <div className="relative group">
-                {/* Glow layer */}
-                <div className={`absolute -inset-10 blur-[80px] opacity-40 rounded-full transition-all duration-700 group-hover:opacity-60 ${product.glowColor.replace('shadow-[', 'bg-').replace(']', '')}`} />
-                
-                <div className={`relative p-3 rounded-[3.5rem] bg-white/40 backdrop-blur-sm border ${product.borderColor} ${product.glowColor} transition-all duration-700 group-hover:scale-[1.02] group-hover:shadow-[0_50px_150px_rgba(0,0,0,0.2)]`}>
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="h-[40vh] md:h-[55vh] w-auto object-cover rounded-[3rem] transition-transform duration-[2s]"
-                  />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
+    <motion.div
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+      className="group relative overflow-hidden rounded-3xl flex flex-col"
+      style={{
+        background: product.bg,
+        boxShadow: `0 4px 30px rgba(0,0,0,0.12)`,
+        minHeight: '420px',
+      }}
+    >
+      {/* Badge */}
+      <div
+        className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest"
+        style={{
+          backgroundColor: product.badgeColor + '22',
+          color: product.badgeColor,
+          border: `1px solid ${product.badgeColor}55`,
+        }}
+      >
+        {product.badge}
       </div>
-    </div>
+
+      {/* Glow effect on hover */}
+      <div
+        className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at 50% 60%, ${product.accent}18 0%, transparent 70%)`,
+        }}
+      />
+
+      {/* Image */}
+      <div className="relative z-10 flex justify-center items-center pt-10 pb-4 px-6 flex-1">
+        <motion.img
+          src={product.image}
+          alt={product.name}
+          className="h-48 w-auto object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105"
+          style={{
+            filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.35))',
+          }}
+        />
+      </div>
+
+      {/* Divider */}
+      <div
+        className="mx-6 mb-0 h-px opacity-20"
+        style={{ backgroundColor: product.accent }}
+      />
+
+      {/* Info */}
+      <div className="relative z-10 px-6 py-5">
+        <p
+          className="text-[10px] font-bold uppercase tracking-[0.35em] mb-1"
+          style={{ color: product.accent }}
+        >
+          {product.tagline} • {product.category}
+        </p>
+        <h3
+          className="font-playfair font-bold text-2xl tracking-tight leading-tight mb-2 uppercase"
+          style={{ color: isDark ? '#f5e6d3' : '#1a1a1a' }}
+        >
+          {product.name}
+        </h3>
+        <p
+          className="text-xs leading-relaxed mb-5 line-clamp-2"
+          style={{ color: isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.55)' }}
+        >
+          {product.description}
+        </p>
+
+        <Link to={`/product/${product.id}`}>
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center justify-between px-5 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300"
+            style={{
+              backgroundColor: product.accent + '18',
+              border: `1px solid ${product.accent}44`,
+              color: product.accent,
+            }}
+          >
+            <span>Explore Fragrance</span>
+            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </motion.div>
+        </Link>
+      </div>
+    </motion.div>
   );
 };
 
 const ProductShowcase = () => {
   return (
-    <div id="collection" className="relative bg-[#FAF9F6] py-8 md:py-12">
-      <div className="py-8 text-center">
-        <span className="text-orange-600 font-playfair italic tracking-[0.3em] text-xs mb-2 block font-medium">The Selection</span>
-        <h2 className="text-4xl md:text-6xl font-playfair font-bold text-[#1a1a1a] tracking-tighter uppercase">Signature Collection</h2>
+    <div id="collection" className="relative bg-[#FAF9F6] py-16 md:py-24">
+      {/* Section Header */}
+      <div className="py-4 text-center mb-12">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-orange-600 font-playfair italic tracking-[0.3em] text-xs mb-3 block font-medium"
+        >
+          The Selection
+        </motion.span>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-4xl md:text-6xl font-playfair font-bold text-[#1a1a1a] tracking-tighter uppercase"
+        >
+          Signature Collection
+        </motion.h2>
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mx-auto mt-5 h-px w-24 bg-gradient-to-r from-transparent via-orange-400 to-transparent"
+        />
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="mt-4 text-sm text-gray-500 tracking-widest uppercase font-medium"
+        >
+          6 Exclusive Fragrances · Handcrafted for the Discerning
+        </motion.p>
       </div>
-      
-      <div className="space-y-4 md:space-y-6">
-        {products.map((product, index) => (
-          <ProductCard key={product.id} product={product} index={index} />
-        ))}
+
+      {/* 3×3 Grid */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {products.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} />
+          ))}
+        </div>
       </div>
+
+      {/* Bottom decoration */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="text-center mt-14"
+      >
+        <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400 font-medium">
+          ✦ &nbsp; Crafted with Rare Ingredients &nbsp; ✦
+        </p>
+      </motion.div>
     </div>
   );
 };
